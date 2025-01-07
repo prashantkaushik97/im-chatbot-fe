@@ -1,0 +1,113 @@
+/* General Layout */
+.chatbot-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #f9f9fb;
+    min-height: 100vh;
+    font-family: 'Roboto', sans-serif;
+}
+
+.chatbot-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #3a3a3c;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Chat Box */
+.chat-box {
+    width: 100%;
+    max-width: 600px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 600px; /* Set a fixed height for the entire chat box */
+    overflow: hidden;
+}
+
+/* Chat History */
+.chat-history {
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-right: 10px;
+    margin-bottom: 20px;
+    height: calc(100% - 150px); /* Adjust height relative to input and submit button */
+}
+
+/* Chat Message Base */
+.chat-message {
+    display: inline-block;
+    padding: 10px 15px;
+    font-size: 1rem;
+    word-wrap: break-word;
+    max-width: 75%;
+    border-radius: 15px;
+    line-height: 1.5;
+}
+
+/* User Message */
+.user-message {
+    align-self: flex-end;
+    background-color: #6395f9;
+    color: #ffffff;
+    border-top-right-radius: 0;
+    text-align: right;
+}
+
+/* Bot Message */
+.bot-message {
+    align-self: flex-start;
+    background-color: #f3f4f6;
+    color: #3a3a3c;
+    border-top-left-radius: 0;
+    text-align: left;
+}
+
+/* Input Area */
+.chat-input {
+    width: 96%;
+    height: 80px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 1rem;
+    resize: none;
+    outline: none;
+    background: #f6f8fa;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Input Focus */
+.chat-input:focus {
+    border-color: #6395f9;
+    box-shadow: 0 0 5px rgba(99, 149, 249, 0.5);
+}
+
+/* Submit Button */
+.chat-submit {
+    margin-top: 15px;
+    align-self: flex-end;
+    background-color: #6395f9;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.chat-submit:hover {
+    background-color: #507ac8;
+}
