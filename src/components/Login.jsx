@@ -74,14 +74,15 @@ function Login() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8081/api/auth/login",
+        "http://35.172.179.144:8081/api/auth/login",
         { email, password },
         {
           headers: {
             "Content-Type": "application/json",
           },
         }
-      );
+      ); 
+      1//05b_J1h9vJn0oCgYIARAAGAUSNwF-L9IryQN_-Uy0_enfO_FSZEQXi3kvetEFk3GwFYjxNSibdeef9a07WPUZ0fFrjHhtqK_OuS4
 
       const { token } = response.data; // Assuming the backend sends the token in `response.data.token`
       // console.log(response)

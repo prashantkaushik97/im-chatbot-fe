@@ -34,7 +34,7 @@ const Chatbot = () => {
         };
 
         try {
-            const response = await fetch("http://localhost:8081/api/chatbot/ask", {
+            const response = await fetch("http://35.172.179.144:8081/api/chatbot/ask", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
