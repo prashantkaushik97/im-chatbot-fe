@@ -82,7 +82,6 @@ function Login() {
           },
         }
       ); 
-      1//05b_J1h9vJn0oCgYIARAAGAUSNwF-L9IryQN_-Uy0_enfO_FSZEQXi3kvetEFk3GwFYjxNSibdeef9a07WPUZ0fFrjHhtqK_OuS4
 
       const { token } = response.data; // Assuming the backend sends the token in `response.data.token`
       // console.log(response)
