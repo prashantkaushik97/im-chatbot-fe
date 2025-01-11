@@ -1,21 +1,58 @@
-import React, { useState } from "react";
+import { useState, useEffect } from 'react';
 import "./Chatbot.css";
 import ShimmerEffect from './ShimmerEffect';
 import DOMPurify from 'dompurify';
 
 const Chatbot = () => {
+    const userEmail = localStorage.getItem("userEmail");
     const [question, setQuestion] = useState("");
     const [chatHistory, setChatHistory] = useState([]);
     const [isThinking, setIsThinking] = useState(false);
+
+    useEffect(() => {
+        const fetchChatHistory = async () => {
+            const authToken = localStorage.getItem("authToken");
+
+            if (!authToken) {
+                console.error("No auth token found in localStorage");
+                return;
+            }
+            try {
+                const response = await fetch(`http://localhost:8081/api/chatbot/chats?userEmail=${userEmail}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch chat history');
+                }
+
+                const data = await response.json();
+                // Ensure all chat history is consistent
+                setChatHistory(data.entries?.map(entry => ({
+                    question: entry.question || entry.message || '',
+                    answer: entry.answer || '',
+                })) || []); // Set to empty array if no data available
+            } catch (error) {
+                console.error("Error fetching chat history:", error);
+            }
+        };
+
+        fetchChatHistory();
+    }, [userEmail]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const question_copy = question;
         setQuestion("");  // Clear the question input field immediately
 
-        // Update chat history immediately with the user's question
+        // Add the user's question to chat history, with an empty answer placeholder
         setChatHistory((prevHistory) => [
             ...prevHistory,
-            { sender: "user", message: question_copy }
+            { question: question_copy, answer: "" },
         ]);
 
         setIsThinking(true);  // Set thinking state to true
@@ -23,11 +60,10 @@ const Chatbot = () => {
         const authToken = localStorage.getItem("authToken");
         if (!authToken) {
             alert("Authentication token is missing. Please log in.");
-            setIsThinking(false);  // Ensure to turn off thinking indicator if early return
+            setIsThinking(false);
             return;
         }
 
-        const userEmail = localStorage.getItem("userEmail");
         const payload = {
             userEmail: userEmail,
             question: question_copy,
@@ -49,22 +85,21 @@ const Chatbot = () => {
 
             const data = await response.json();
 
-            // Update chat history with the bot's response
+            // Replace the user's placeholder entry with the bot's answer
             setChatHistory((prevHistory) => [
-                ...prevHistory,
-                { sender: "bot", message: DOMPurify.sanitize(data.answer) },
+                ...prevHistory.slice(0, -1), // Remove the last user placeholder
+                { question: question_copy, answer: DOMPurify.sanitize(data.answer) },
             ]);
         } catch (error) {
             console.error("Error fetching chatbot response:", error);
             setChatHistory((prevHistory) => [
-                ...prevHistory,
-                { sender: "bot", message: "Sorry, I couldn't fetch a response. Please try again." },
+                ...prevHistory.slice(0, -1), // Remove the last user placeholder
+                { question: question_copy, answer: "Sorry, I couldn't fetch a response. Please try again." },
             ]);
         }
 
-        setIsThinking(false);  // Set thinking state to false once response is handled
+        setIsThinking(false);
     };
-
 
     return (
         <div className="chatbot-container">
@@ -73,16 +108,24 @@ const Chatbot = () => {
             <div className="chat-box">
                 <div className="chat-history">
                     {chatHistory.map((chat, index) => (
-                        <div
-                            key={index}
-                            className={`chat-message ${chat.sender === "user" ? "user-message" : "bot-message"}`}
-                        >
-                            <p dangerouslySetInnerHTML={{ __html: chat.message }}></p>
+                        <div key={index}>
+                            <div className="chat-message user-message">
+                                <div className="chat-bubble">
+                                    <p>{chat.question}</p>
+                                </div>
+                            </div>
+                            {chat.answer && (
+                                <div className="chat-message bot-message">
+                                    <div className="chat-bubble">
+                                        <p dangerouslySetInnerHTML={{ __html: chat.answer }} className="chat-answer"></p>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     ))}
-                    {/* {isThinking && <div className="chat-message bot-message">Thinking...</div>} */}
-                    {isThinking ? <ShimmerEffect /> : null}
+                    {isThinking && <ShimmerEffect />}
                 </div>
+
                 <form onSubmit={handleSubmit} className="chat-form">
                     <textarea
                         className="chat-input"

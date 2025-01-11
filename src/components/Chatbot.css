@@ -33,20 +33,22 @@
 }
 
 /* Chat History */
+/* Chat History */
 .chat-history {
-    flex-grow: 1;
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 10px;
     padding-right: 10px;
     margin-bottom: 20px;
     height: calc(100% - 150px); /* Adjust height relative to input and submit button */
+    overflow-y: auto;
+    padding-left: 10px; /* Optional: Add left padding for alignment */
 }
 
 /* Chat Message Base */
 .chat-message {
-    display: inline-block;
+    display: flex;
+    justify-content: flex-start;  /* Default for bot messages */
     padding: 10px 15px;
     font-size: 1rem;
     word-wrap: break-word;
@@ -62,6 +64,9 @@
     color: #ffffff;
     border-top-right-radius: 0;
     text-align: right;
+    justify-content: flex-end;  /* Ensure the user message is aligned right */
+    max-width: 75%; /* Adjust width as necessary */
+    margin-left: auto; /* Ensures the message stays aligned to the right */
 }
 
 /* Bot Message */
@@ -71,7 +76,11 @@
     color: #3a3a3c;
     border-top-left-radius: 0;
     text-align: left;
+    justify-content: flex-start;  /* Default for bot messages */
+    max-width: 75%; /* Adjust width as necessary */
+    margin-right: auto; /* Ensures the message stays aligned to the left */
 }
+
 
 /* Input Area */
 .chat-input {
